@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Update user</title>
+</head>
+<body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="logout">
+</form>
+
+<form th:method="POST" th:action="@{/admin/update}" th:object="${user}">
+
+    <input type="hidden" th:field="*{id}">
+
+    <label for="name">Enter name:</label>
+    <input type="text" th:field="*{name}" id="name" th:value="${user.getName()}">
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+
+    <br>
+
+    <label for="surname">Enter surname:</label>
+    <input type="text" th:field="*{surname}" id="surname" th:value="${user.getSurname()}">
+    <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname error</div>
+
+    <br>
+
+    <label for="age">Enter age:</label>
+    <input type="number" th:field="*{age}" id="age" th:value="${user.getAge()}">
+    <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+
+    <br>
+
+    <label for="email">Enter email:</label>
+    <input type="email" th:field="*{email}" id="email" th:value="${user.getEmail()}">
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+
+    <br>
+
+    <label for="username">Enter username:</label>
+    <input type="text" th:field="*{username}" id="username" th:value="${user.getUsername()}">
+    <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+
+    <br>
+
+    <label for="password">Enter password:</label>
+    <input type="text" th:field="*{password}" id="password" th:value="${user.getPassword()}">
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+
+    <br>
+
+    <label for="passwordConfirm">Confirm password:</label>
+    <input type="text" th:field="*{passwordConfirm}" id="passwordConfirm" th:value="${user.getPasswordConfirm()}">
+
+    <br>
+
+    <label for="roles">Enter role:</label>
+    <select th:field="*{roles}" id="roles" multiple>
+        <option th:value="ROLE_USER">ROLE_USER</option>
+        <option th:value="ROLE_ADMIN">ROLE_ADMIN</option>
+    </select>
+
+    <br>
+
+    <input type="submit" value="Update">
+
+</form>
+
+<a th:href="@{/admin/}">back</a>
+
+</body>
+</html>
