@@ -12,7 +12,7 @@ public class UsersController {
 
 	@GetMapping(value = "/user_information")
 	public String profile(@AuthenticationPrincipal User user, Model model) {
-		model.addAttribute("user", user);
+		model.addAttribute("authUser", user);
 		return "/user/user_information";
 	}
 }

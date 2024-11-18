@@ -46,7 +46,7 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             return "/auth/registration";
         } else {
-            user.setRoles(roleService.findByName("USER"));
+            user.setRoles(roleService.findByName("ROLE_USER"));
             registrationService.registration(user);
             return "redirect:/auth/success_registration";
         }

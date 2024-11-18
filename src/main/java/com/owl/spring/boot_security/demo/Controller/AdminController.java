@@ -33,7 +33,7 @@ public class AdminController {
     @GetMapping(value = "/")
     public String printUsersTable(@AuthenticationPrincipal User authUser, Model model) {
         User newUser = new User();
-        setupModelAttributes(model, authUser, newUser, newUser);
+        setupModelAttributes(model, authUser, newUser, newUser, newUser);
         return "/admin/index";
     }
 
@@ -43,40 +43,49 @@ public class AdminController {
 //    }
 
     @PostMapping(value = "/new")
-    public String createUser(@ModelAttribute("user") @Valid User user,
+    public String createUser(@ModelAttribute("user") @Valid User newUser,
                              BindingResult bindingResult) {
-        userValidator.validate(user, bindingResult);
+        userValidator.validate(newUser, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/admin/new";
         }
-        registrationService.registration(user);
+        registrationService.registration(newUser);
         return "redirect:/admin/";
     }
 
     @GetMapping(value = "/edit")
-    public String updateUser(@RequestParam("id") long id,
+    public String editModal(@RequestParam("id") long id,
                              @AuthenticationPrincipal User authUser,
                              Model model) {
         User newUser = new User();
         User userEdit = userService.findById(id);
         userEdit.setPasswordConfirm(userEdit.getPassword());
-        setupModelAttributes(model, authUser, newUser, userEdit);
+        setupModelAttributes(model, authUser, newUser, userEdit, newUser);
         return "admin/index";
     }
 
     @PostMapping(value = "/update")
-    public String editUser(@ModelAttribute("userEdit") @Valid User user, BindingResult bindingResult,
+    public String updateUser(@ModelAttribute("userEdit") @Valid User userEdit, BindingResult bindingResult,
                            @AuthenticationPrincipal User authUser, Model model
     ) {
-        user.setPasswordConfirm(user.getPassword());
-        userValidator.validate(user, bindingResult);
+        userEdit.setPasswordConfirm(userEdit.getPassword());
+        userValidator.validate(userEdit, bindingResult);
         if (bindingResult.hasErrors()) {
             User newUser = new User();
-            setupModelAttributes(model, authUser, newUser, user);
+            setupModelAttributes(model, authUser, newUser, userEdit, newUser);
             return "/admin/index";
         }
-        registrationService.update(user);
+        registrationService.update(userEdit);
         return "redirect:/admin/";
+    }
+
+    @GetMapping(value = "/remove")
+    public String removeModal(@RequestParam("id") long id,
+                              @AuthenticationPrincipal User authUser, Model model) {
+        User userRemove = userService.findById(id);
+        User newUser = new User();
+        setupModelAttributes(model, authUser, newUser, newUser, userRemove);
+        return "/admin/index";
     }
 
     @GetMapping(value = "/delete")
@@ -86,16 +95,17 @@ public class AdminController {
     }
 
     @GetMapping(value = "/user_information")
-    public String profile(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
+    public String profile(@AuthenticationPrincipal User authUser, Model model) {
+        model.addAttribute("authUser", authUser);
         return "/admin/user_information";
     }
 
-    private void setupModelAttributes(Model model, User authUser, User newUser, User userEdit) {
+    private void setupModelAttributes(Model model, User authUser, User newUser, User userEdit, User userRemove) {
         List<User> userList = userService.list();
         model.addAttribute("users", userList);
         model.addAttribute("authUser", authUser);
         model.addAttribute("newUser", newUser);
         model.addAttribute("userEdit", userEdit);
+        model.addAttribute("userRemove", userRemove);
     }
 }

@@ -59,6 +59,9 @@ public class User implements UserDetails {
     }
 
     public String getStringRoles() {
+        if (roles == null) {
+            return "";
+        }
         return roles.stream()
                 .map(Role::getName)
                 .map(name -> name.replaceAll("ROLE_", ""))
